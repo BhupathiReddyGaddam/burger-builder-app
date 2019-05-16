@@ -73,6 +73,15 @@ class BurgerBuilder extends Component {
         const doesShow = this.state.showModal;
         this.setState({showModal : !doesShow});
     }
+
+    closeOrderSummaryHandler = () => {
+        this.setState({showModal: false});
+    }
+
+    purchaseContinueHandler = () => {
+        alert('You can continue!');
+    }
+
     render() { 
         const disabledInfo = {
             ...this.state.ingredients
@@ -89,8 +98,11 @@ class BurgerBuilder extends Component {
         // }
         return(
             <Aux>
-                <Modal show = {this.state.showModal}>
-                    <OrderSummary ingredients={this.state.ingredients}/>
+                <Modal show = {this.state.showModal} backdropClicked = {this.closeOrderSummaryHandler}>
+                    <OrderSummary ingredients={this.state.ingredients}
+                    purchaseClose = {this.closeOrderSummaryHandler}
+                    purchaseContinue = {this.purchaseContinueHandler}
+                    finalPrice = {this.state.totalPrice}/>
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
