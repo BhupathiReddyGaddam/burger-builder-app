@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import Aux from '../../../hoc/Auxilliary/Auxilliary';
 import Button from '../../UI/Button/Button';
+import axios from '../../../axios/axios';
 
 class OrderSummary extends Component {
+    storeOrderSummary = () => {
+
+    }
     componentWillUpdate() {
         console.log('[OrderSummary] will update');
     }
