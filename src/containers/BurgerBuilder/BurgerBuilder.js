@@ -7,6 +7,8 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios/axios';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+import { Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 const INGREDIENT_PRICES = {
     salad: 0.5,
     meat: 0.3,
@@ -25,6 +27,7 @@ class BurgerBuilder extends Component {
     };
 
     componentDidMount() {
+        console.log(this.props);
         axios.get('https://burger-builder-9527b.firebaseio.com/ingredients.json')
             .then(response => {
                 this.setState({ingredients: response.data});
@@ -89,30 +92,40 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler = () => {
         //alert('You can continue!');
-        this.setState({showSpinner: true});
-        const orderData = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Maxi',
-                address: {
-                    Door: '4850 156th Ave',
-                    city: 'Redmond',
-                    zip: 765444
-                },
-                email: 'maxi@gmail.com'
-            },
-            delvery: 'fastest'
+        // this.setState({showSpinner: true});
+        // const orderData = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Maxi',
+        //         address: {
+        //             Door: '4850 156th Ave',
+        //             city: 'Redmond',
+        //             zip: 765444
+        //         },
+        //         email: 'maxi@gmail.com'
+        //     },
+        //     delvery: 'fastest'
+        // }
+        // axios.post('/orderSummary.json', orderData)
+        // .then(response => {
+        //     //console.log(response);
+        //     this.setState({showSpinner: false, showModal: false});
+        // })
+        // .catch(error => {
+        //     //console.log(error);
+        //     this.setState({showSpinner: false, showModal: false});
+        // });
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
         }
-        axios.post('/orderSummary.json', orderData)
-        .then(response => {
-            //console.log(response);
-            this.setState({showSpinner: false, showModal: false});
-        })
-        .catch(error => {
-            //console.log(error);
-            this.setState({showSpinner: false, showModal: false});
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
         });
+        
     }
 
     render() { 
@@ -170,4 +183,5 @@ class BurgerBuilder extends Component {
         );
     }
 }
-export default WithErrorHandler(BurgerBuilder, axios);
+//export default WithErrorHandler(BurgerBuilder, axios);
+export default withRouter(BurgerBuilder);
