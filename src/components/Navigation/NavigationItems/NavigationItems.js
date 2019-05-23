@@ -12,8 +12,9 @@ const NavigationItems = (props) => {
         <Aux>
             <ul className={classes.NavigationItems}>
                 {/* <NavigationItem links="/" active>Burger Builder</NavigationItem> */}
-                <NavigationItem links='/'>Burger Builder</NavigationItem>
-                <NavigationItem links='/checkout'>Check Out</NavigationItem>
+                <NavigationItem links='/' exact>Burger Builder</NavigationItem>
+                {/* <NavigationItem links='/checkout'>Check Out</NavigationItem> */}
+                <NavigationItem links='/orders'>Orders</NavigationItem>
             </ul>
         </Aux>
     );
