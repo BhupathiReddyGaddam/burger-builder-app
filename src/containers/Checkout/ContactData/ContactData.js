@@ -4,6 +4,7 @@ import classes from './ContactData.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import axios from '../../../axios/axios';
 import Input from '../../../components/UI/Input/Input';
+import { connect } from 'react-redux';
 
 class ContactData extends Component {
     state = {
@@ -98,14 +99,14 @@ class ContactData extends Component {
 
     orderHandler = (event) => {
         event.preventDefault();
-        console.log(this.props.ingredients);
+        console.log(this.props.ing);
         this.setState({showSpinner: true});
         const formData = {};
         for(let formElementIdentifier in this.state.orderForm) {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
         }
         const orderData = {
-            ingredients: this.props.ingredients,
+            ingredients: this.props.ing,
             price: this.props.price,
             oderContactData: formData,
         }
@@ -184,4 +185,11 @@ class ContactData extends Component {
         );
     }
 }
-export default ContactData;
+
+const mapStateToProps = (state) => {
+    return {
+        ing: state.ingredients,
+        price: state.totalPrice
+    }
+}
+export default connect(mapStateToProps)(ContactData);
