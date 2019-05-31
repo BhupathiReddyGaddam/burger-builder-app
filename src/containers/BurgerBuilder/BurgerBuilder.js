@@ -10,7 +10,7 @@ import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
 import { Route } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/Action';
+import * as BurgerActionCreator from '../../store/actions/Index';
 
 class BurgerBuilder extends Component {
     state = {
@@ -21,13 +21,7 @@ class BurgerBuilder extends Component {
 
     componentDidMount() {
         console.log(this.props);
-        // axios.get('https://burger-builder-9527b.firebaseio.com/ingredients.json')
-        //     .then(response => {
-        //         this.setState({ingredients: response.data});
-        //     })
-        //     .catch(error => {
-        //         this.setState({error: true})
-        //     });
+        this.props.onInitIngredients();
     }
 
     updatePurchaseState = (ingredients) => {
@@ -105,7 +99,7 @@ class BurgerBuilder extends Component {
         }
 
         let burger = (
-            this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner/>
+            this.props.error ? <p>Ingredients can't be loaded</p> : <Spinner/>
         );
         let orderSummary = null;
         if (this.props.ing) {
@@ -152,15 +146,17 @@ class BurgerBuilder extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        ing: state.ingredients,
-        price: state.totalPrice
+        ing: state.burgerReducer.ingredients,
+        price: state.burgerReducer.totalPrice,
+        error: state.burgerReducer.error
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addMoreIngredient: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
-        removeIngredient: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})
+        addMoreIngredient: (ingName) => dispatch(BurgerActionCreator.addIngreident(ingName)),
+        removeIngredient: (ingName) => dispatch(BurgerActionCreator.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(BurgerActionCreator.initIngredients())
     }
 }
 //export default WithErrorHandler(BurgerBuilder, axios);
